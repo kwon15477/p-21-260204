@@ -1,0 +1,52 @@
+package com.back;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
+
+@Profile("test")
+@Configuration
+@RequiredArgsConstructor
+public class TestInitData {
+
+    @Autowired
+    @Lazy
+    private TestInitData self;
+    private final QuestionRepository questionRepository;
+
+    @Bean
+    ApplicationRunner initDataRunner(AnswerRepository answerRepository) {
+        return args -> {
+            System.out.println("테스트 모드 - 초기 데이터 로딩");
+            if (this.questionRepository.count() > 0) {
+                return;
+            }
+
+            Question q1 = new Question();
+            q1.setSubject("sbb가 무엇인가요?");
+            q1.setContent("sbb에 대해서 알고 싶습니다.");
+
+            q1.addAnswer("답글 1");
+            q1.addAnswer("답글 2");
+
+            this.questionRepository.save(q1);  // 첫번째 질문 저장
+//            Answer a1 = new Answer();
+//            a1.setContent("답글1");
+//            a1.setQuestion(q1);
+//            Answer a2 = new Answer();
+//            a2.setContent("답글1");
+//            a2.setQuestion(q1);
+//            answerRepository.save(a1);  // 첫번째 답글 저장
+//            answerRepository.save(a2);  // 두번째 답글 저장
+
+            Question q2 = new Question();
+            q2.setSubject("스프링부트 모델 질문입니다.");
+            q2.setContent("id는 자동으로 생성되나요?");
+            this.questionRepository.save(q2);  // 두번째 질문 저장
+        };
+    }
+}

@@ -1,8 +1,12 @@
 package com.back;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Answer {
 
     @Id
@@ -10,7 +14,7 @@ public class Answer {
     private int id;
 
     private String content;
-    
+
     @ManyToOne
-    private Question Question;
+    private Question question;
 }
